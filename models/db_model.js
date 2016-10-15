@@ -48,7 +48,7 @@ class DBModel {
 
   all(connection, cb) {
     let READ_ALL = `SELECT * FROM ${this.table}`;
-    connection.each(READ_ALL, (err, row) => {
+    this.connection.each(READ_ALL, (err, row) => {
       if (err) {
         console.log(err);
       } else {
@@ -67,13 +67,18 @@ class DBModel {
 
   }
 
-  find(connection, id, cb) {
+  find(connection, id) {
     let FIND_ID = `SELECT * FROM '${this.table}' WHERE id = '${id}'`;
-    connection.each(FIND_ID, () => {
-      if (cb != null) {
-        cb();
-      }
-    })
+    console.log(FIND_ID);
+    console.log(this.connection);
+    this.connection.each(FIND_ID, function(row){return row})
+    // => {
+    //   console.log(row);
+    //   if (cb != null) {
+    //     cb(err,row);
+    //   }
+    // }
+
 
   }
 
