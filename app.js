@@ -10,7 +10,7 @@ const repl = require('repl');
 
 var replServer = repl.start({prompt: 'orm-jr-2> '});
 replServer.defineCommand('setup', {
-  help: 'to setup the program .setup <students || cohorts>',
+  help: 'Juang || > .setup students || cohorts  * one time only',
   action: function(name) {
     DBModel.setup(name);
     this.displayPrompt();
@@ -18,7 +18,7 @@ replServer.defineCommand('setup', {
 });
 
 replServer.defineCommand('create', {
-  help: '.create (to create a row of Student or cohort) || .create Student std_first_name std_last_name std_cohort_id',
+  help: 'Juang || .create > .create Student std_first_name std_last_name std_cohort_id',
   action: function(data) {
     data = data.split(" ");
     if (data[0] === 'Student') {
@@ -29,39 +29,53 @@ replServer.defineCommand('create', {
       }
       DBModel.create(data[0], s_obj);
     } else {
-      console.log(data);
+      let c_obj = {
+        name: data[1]
+      }
+      DBModel.create(data[0], c_obj);
     }
-    // console.log(data[0]);
-    // DBModel.setup(name);
-    // this.displayPrompt();
   }
 });
+
+replServer.defineCommand('update', {
+  help: 'Juang || .update > .update Student id first last cohort_id || > .update Cohort id name',
+  action: function(data) {
+    data = data.split(" ");
+    if (data[0] === 'Student') {
+      let s_obj = {
+        first_name: data[2],
+        last_name: data[3],
+        cohort_id: data[4]
+      }
+      DBModel.update(data[0], data[1], s_obj);
+    } else {
+      let c_obj = {
+        id: data[1],
+        name: data[2]
+      }
+      DBModel.update(data[0], c_obj);
+      console.log("It's been updated");
+    }
+  }
+});
+
+replServer.defineCommand('show', {
+  help: 'Juang || > .show Student || Cohort',
+  action: function(data) {
+    data = data.split(" ");
+    DBModel.all(data[0]);
+  }
+});
+
+replServer.defineCommand('delete', {
+  help: 'Juang || .delete <Student or Cohort => > .delete Student id || > .delete Cohort id',
+  action: function(data) {
+    data = data.split(" ");
+    DBModel.delete(data[0], data[1])
+  }
+});
+
 replServer.defineCommand('saybye', function() {
   console.log('Goodbye!');
   this.close();
 });
-
-
-
-// let ruby = {
-//   first_name: "Ruby",
-//   last_name: "Sanjaya",
-//   cohort_id: 1
-// }
-//
-// //let dbModel = new DBModel();
-// DBModel.create("Student", ruby);
-
-//DBModel.setup('cohorts');
-
-
-//dbModel.create(dbModel.connection, new Student("Henjaya", 1));
-// Student.create(dbModel.connection, new Student("Fahmi", "Riza", 1));
-// // Student.create(dbModel.connection, new Student("juang", "wiantoro", 1));
-// // Student.delete(dbModel.connection, 2);
-// Student.showAll(dbModel.connection);
-// // Cohort.create(dbModel.connection, new Cohort("America"));
-//
-// let student = new Student("Bagus", "Juang", 1);
-// // // //console.log(student.first_name);
-// Student.update(dbModel.connection, 5, student);
