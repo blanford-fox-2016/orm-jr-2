@@ -1,24 +1,24 @@
 "use strict"
 
 let sqlite3 = require('sqlite3').verbose();
-let file = new sqlite3.Database('../db/init.sql');
+let file = new sqlite3.Database('./db/init.sql');
 
 class DBModel {
   constructor() {
     this.connection = file;
   }
 
-  setup(roles) {
-    if (roles = 'students') {
-      this.connection.run("CREATE TABLE students (id INTEGER PRIMARY KEY AUTOINCREMENT, first_name TEXT, last_name TEXT, cohort_id INTEGER)");
+  static setup(roles) {
+    if (roles === 'students') {
+      file.run("CREATE TABLE students (id INTEGER PRIMARY KEY AUTOINCREMENT, first_name STRING, last_name STRING, cohort_id INTEGER);");
     } else {
-      this.connection.run("CREATE TABLE cohorts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
+      file.run("CREATE TABLE cohorts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);");
     }
   }
 
-  static create(connection, object) {
-    if (`${object}.length` === 4) {
-      connection.run(`INSERT INTO students(first_name, last_name, cohort_id) VALUES ('${object.first_name}', '${object.last_name}', '${object.cohort_id}');`, (error) => {
+  static create(tb_name, object) {
+    if (tb_name === 'Student') {
+      file.run(`INSERT INTO students(first_name, last_name, cohort_id) VALUES ('${object.first_name}', '${object.last_name}', '${object.cohort_id}');`, (error) => {
         if (error) {
           console.error(error);
         } else {
@@ -64,6 +64,5 @@ class DBModel {
     })
   }
 }
-
 
 export default DBModel

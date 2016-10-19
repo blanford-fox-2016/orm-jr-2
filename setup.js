@@ -4,4 +4,4 @@ import DBModel from "./models/db_model.js";
 
 let dbModel = new DBModel();
 
-dbModel.setup('students')
+dbModel.setup('students');
